@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<title>TIME SPLITTER</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+
+	<nav class="navbar navbar-dark bg-dark">
+		<a class="navbar-brand font-weight-bolder">TIME SPLITTER</a>
+		<button class="btn btn-danger" type="button" onclick="buzz()">SPLIT</button>
+	</nav>
+
+	<div class="jumbotron jumbotron-fluid bg-secondary">
+		<div class="container">
+			<h1>CLASSEMENT</h1>
+			<h2>Un classement en fonction du split du joueur et du temps pris pour y arriver</h2>
+			<div id="COUNTDOWN">
+				<button class="btn btn-lg btn-block btn-dark" id="COUNTDOWN_">
+					<span class="spinner-border spinner-border-sm"></span>
+					Loading..
+				</button></div>
+		</div><br>
+
+		<div class="container-fluid text-center" id="main"></div>
+	</div>
+
+	<nav class="navbar navbar-dark bg-dark fixed-bottom">
+		<button class="btn btn-danger btn-block" type="button" onclick="buzz()">SPLIT</button>
+	</nav>
+	<script src="/ressources/splits.js"></script>
+	<script src="/ressources/script.js"></script>
+
+
+</body>
+
+</html>

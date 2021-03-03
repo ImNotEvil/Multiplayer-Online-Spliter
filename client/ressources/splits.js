@@ -1,4 +1,4 @@
-[
+var splits = [
 	{
 		"Name" : "Début",
 		"icone" : "https://www.pokebip.com/pages/jeuxvideo/platine/soluce/images_fr/01.png",

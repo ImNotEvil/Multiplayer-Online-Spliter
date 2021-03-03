@@ -22,17 +22,19 @@ sse.updateInit(information);
 
 function update_sse() {
     sse.updateInit(information);
-    sse.send(information, 'UPDATE');
+    sse.send(information,'UPDATE');
 }
 
 function formatage(milliseconds){
-	return (moment.duration(milliseconds-information.debut, "milliseconds").format("h:mm:ss:SS"));
+	return moment.utc(milliseconds-information.debut).format("HH:mm:ss.SSS");
 }
 
-app.get("/sse", (req, res) => {
+app.use('/ressources', express.static(__dirname + '/client/ressources'));
+app.get("/", (req, res) => {
     console.log("/");
     res.sendFile(__dirname + "/client/client.html")
 })
+
 app.get('/sse', sse.init);
 
 app.post("/add_player", (req, res) => {
@@ -48,7 +50,7 @@ app.post("/add_player", (req, res) => {
             "pseudo": pseudo,
             "étape": 0,
             "temps": "",
-			"time_key" : 0;
+			"time_key" : 0
         }
         update_sse();
     }
@@ -61,12 +63,10 @@ app.post("/next_step", (req, res) => {
     var pseudo = req.query.pseudo;
 	var millisecondes = req.query.millisecondes;
 
-    if (information.en_cours && !information.players_id.includes(id)) {
-
-		information.players.temps = formatage(millisecondes);
-		information.players.time_key = millisecondes;
+    if (information.en_cours && information.players_id.includes(id)) {
+		information.players[id].temps = formatage(millisecondes);
+		information.players[id].time_key = parseInt(millisecondes);
 		information.players[id].étape = information.players[id].étape+1;
-
         update_sse();
     }
     res.send("next_step");
@@ -76,7 +76,6 @@ app.post("/next_step", (req, res) => {
 app.post("/start", (req, res) => {
     console.log("/start");
     if (!information.en_cours) {
-		information.en_cours=false;
         setTimeout(function() {
             //1
             sse.send(4, 'COUNTDOWN');
@@ -91,14 +90,21 @@ app.post("/start", (req, res) => {
                         sse.send(1, 'COUNTDOWN');
                         setTimeout(function() {
                             //5
-                            sse.send("GO", 'COUNTDOWN');
-							information.debut = Date.now();
+	                        sse.send("GO", 'COUNTDOWN');
+							setTimeout(function() {
+	                            //0
+								information.en_cours=true;
+								information.debut = Date.now();
+								update_sse();
+	                            sse.send(0, 'COUNTDOWN');
+	                        }, 1000);
                         }, 1000);
                     }, 1000);
                 }, 1000);
             }, 1000);
         }, 1000);
     }
+	res.send("start");
 })
 
 app.listen(8080, () => {
