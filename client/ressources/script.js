@@ -45,7 +45,7 @@ function actualise(event){
 	});
 	var reponse = JSON.parse(event.data);
 
-	if (reponse.en_cours){document.getElementById('COUNTDOWN').innerHTML = "";}
+	if (reponse.en_cours){document.getElementById('COUNTDOWN_').innerHTML = "PARTIE EN COURS";}
 
     console.log("UPDATE", reponse);
     var tableau = []
@@ -91,16 +91,6 @@ function buzz() {
     xhttp.send();
 }
 
-function start() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log('start', xhttp.responseText);
-        }
-    };
-    xhttp.open("POST", "start", true);
-    xhttp.send();
-}
 function fill_splits(i,split){
 	return (`<div class="row" id="split_${i}_row"><div class="col-3" id="split_${i}_titre"><div class="card badge-dark"><h3 class="card-header">SPLIT : ${split.Name}</h3><img src="${split.icone}" alt="Card image"><div class="card-body"><p class="card-text">${split.Détail}</p></div></div></div><div class="col-9 outline-dark card-columns" id="split_${i}_participants"></div></div></br>`);
 }
@@ -109,5 +99,31 @@ function fill_participants(i,participant){
 	if (i==1) base="warning"
 	if (i==2) base="primary"
 	if (i==3) base="success"
-	return (`<div class="card badge-dark bg-${base}"><h3 class="card-header">${participant.pseudo}</h3><h4>RANK <span class="badge badge-pill">${i}</span></h4><h4>TEMPS <span class="badge badge-pill">${participant.temps}</span></h4></div>`);
+	return (`<div class="card badge-dark bg-${base}"><h3 class="card-header"><button type="button" class="close" onclick="kill_player('${participant.id}')">&times;</button>${participant.pseudo}</h3><h4>RANK <span class="badge badge-pill">${i}</span></h4><h4>TEMPS <span class="badge badge-pill">${participant.temps}</span></h4></div>`);
+}
+
+
+var pathname = window.location.pathname + "/";
+
+
+function start() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log('start', xhttp.responseText);
+        }
+    };
+    xhttp.open("POST", pathname+"start", true);
+    xhttp.send();
+}
+
+function kill_player(id_joueur) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log('buzz', xhttp.responseText);
+        }
+    };
+    xhttp.open("POST", pathname+ "kill_player?id=" + id_joueur, true);
+    xhttp.send();
 }
