@@ -10,7 +10,8 @@ var information = {
     "debut": null,
     "en_cours": false,
     "players_id": [],
-    "players": {}
+    "players": {},
+	"max_étape" : 19
 };
 sse.updateInit(information);
 
@@ -45,7 +46,7 @@ app.post("/add_player", (req, res) => {
 
         information.players_id.push(id);
         information.players[id] = {
-			"id" : id,	
+			"id" : id,
             "pseudo": pseudo,
             "étape": 0,
             "temps": "",
@@ -62,7 +63,7 @@ app.post("/next_step", (req, res) => {
     var pseudo = req.query.pseudo;
     var millisecondes = req.query.millisecondes;
 
-    if (information.en_cours && information.players_id.includes(id)) {
+    if (information.en_cours && information.players_id.includes(id) && information.players[id].étape<information.max_étape) {
         information.players[id].temps = formatage(millisecondes);
         information.players[id].time_key = parseInt(millisecondes);
         information.players[id].étape = information.players[id].étape + 1;
